@@ -3,8 +3,11 @@
 * [中文版](./README_CN.md)
 
 The AS6221 IC is a high accuracy digital temperature sensor system that communicates via a 2-wire digital bus with other devices. It consists of a Si bandgap temperature sensor, an ADC and a digital signal processor.
+
 This sensor is especially designed to be used in applications where a high measurement accuracy is needed, for example measuring the skin temperature. Beside these applications, it can also be used to replace PTC resistors.
+
 The high temperature accuracy and an ultra-low power consumption (low operation and quiescent current) makes the AS6221 ideally suited for mobile/battery powered applications.The AS6221 is an easy to integrate and use solution, featuring a factory-calibrated sensor, integrated linearization and the possibility to use 8 different I²C addresses, enabling to use eight AS6221 devices on one bus.
+
 Additionally, the AS6221 temperature sensor system features an alert functionality, which triggers e.g. an interrupt to protect devices from excessive temperatures.The AS6221 production test setup is calibrated according NIST and the verification equipment is calibrated by an ISO/IEC-17025 accredited laboratory.
    
    
