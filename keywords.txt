@@ -1,0 +1,43 @@
+#######################################
+# Syntax Coloring Map For DFRobot_AS6221
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+
+DFRobot_AS6221 KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+getTemperature	KEYWORD2
+setHighThreshold	KEYWORD2
+getHighThreshold	KEYWORD2
+getLowThreshold	KEYWORD2
+setConfig	KEYWORD2
+setConversionRate	KEYWORD2
+setConsecutiveFaults	KEYWORD2
+setSingleShotConversion	KEYWORD2
+IsSingleShotComplete	KEYWORD2
+wakeup	KEYWORD2
+sleep	KEYWORD2
+getAlert	KEYWORD2
+
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+eOnce	LITERAL1
+eTwice	LITERAL1
+eThreeTimes	LITERAL1
+eFourTimes	LITERAL1
+e4000ms	LITERAL1
+e1000ms	LITERAL1
+e250ms	LITERAL1
+e125ms	LITERAL1  
