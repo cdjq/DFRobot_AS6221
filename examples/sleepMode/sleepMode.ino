@@ -1,6 +1,8 @@
 /*!
  * @file sleepMode.ino
  * @brief This section describes how to use the sleep mode of the AS6221.
+ * @n After AS6221 enters sleep mode, the single acquisition mode can be configured through registers, 
+ * @n and access to the registers can determine whether the acquisition is complete.
  * @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license The MIT License (MIT)
  * @author [fary](feng.yang@dfrobot.com)
@@ -15,7 +17,6 @@ void setup() {
 	Serial.begin(115200);
 	while(!Serial);
 	Serial.print("AS6221 init...");
-	//pinMode(interruptPin, INPUT_PULLUP);
 	while(AS6221.begin()!=0){
 		Serial.print("failed,Not found AS6221!");
 	}

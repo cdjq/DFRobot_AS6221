@@ -1,4 +1,4 @@
-# DFRobot_FM17550
+# DFRobot_AS6221
 
 * [中文版](./README_CN.md)
 
@@ -11,9 +11,11 @@ The high temperature accuracy and an ultra-low power consumption (low operation 
 Additionally, the AS6221 temperature sensor system features an alert functionality, which triggers e.g. an interrupt to protect devices from excessive temperatures.The AS6221 production test setup is calibrated according NIST and the verification equipment is calibrated by an ISO/IEC-17025 accredited laboratory.
    
    
-![正反面svg效果图](../resources/images/featured.png)
+![正反面svg效果图](../resources/images/SEN0660.png)
 
 ## Product Link（https://www.dfrobot.com/)
+      
+      SEN0660 Gravity: AS6221 Skin Temperature Sensor
     
 ## Table of Contents
 
@@ -36,88 +38,130 @@ This library provides a way to drive the AS6221 under the Arduino IDE, allowing 
 ```C++
 
   /**
-   * @brief Constructor for the card reader.
-   * @param pWire Pointer to the I2C interface (default: Wire).
-   * @param addr I2C address of the card reader (default: 0x28).
-   */
-  DFRobot_FM17550(TwoWire *pWire , uint8_t addr);
-    
-  /**
-   * @brief Initializes the card reader module.
-   * @param rstPin Pin number for resetting the module (default: 0).
-   * @return Returns 0 on success; otherwise, returns an error code.
-   */
-  char begin();
+   * @fn DFRobot_AS6221
+   * @brief Constructor
+   * @param addr device address
+   * @param pWire device bus
+   * @return None
+  */
+  DFRobot_AS6221(uint8_t addr, TwoWire *pWire = &Wire);
 
   /**
-   * @brief Sets the authentication key for communication with the card.
-   * @param key Pointer to an array containing the 6-byte key.
+   * @fn begin
+   * @brief Check whether the AS6221 device exists on the IIC bus.
+   * @return Whether the sensor device is found.
+   * @retval 0: Sensor device exists, other values: Sensor device does not exist.
+  */
+  byte begin(void);
+
+  /**
+   * @fn getTemperature
+   * @brief  get temperature
+   * @return temperature（℃）
    */
-  void setKey(uint8_t *key);
+  float getTemperature(void);
   
-  /*!
-   * @fn scan(String nfcuid)
-   * @brief Scan to determine whether there is a NFC smart card/tag with the specified UID.
-   * @param nfcuid UID of the NFC card.
-   * @return Boolean type, the result of operation
-   * @retval true Finds a card with a specific UID
-   * @retval false The card with a specific UID was not found
+  /**
+   * @fn setHighThreshold
+   * @brief  set high threshold
+   * @return true or false
    */
-  bool scan(String nfcuid);
-
-  /*!
-   * @fn scan(void)
-   * @brief Scan to determine whether there is a NFC smart card/tag.
-   * @return Boolean type, the result of operation
-   * @retval true means find out a MIFARE Classic card.
-   * @retval false no card
+  bool setHighThreshold(float highThreshold);
+  
+  /**
+   * @fn getHighThreshold
+   * @brief  get high threshold
+   * @return high threshold
    */
-  bool  scan(void);
+  float getHighThreshold(void);
+  
+  /**
+   * @fn setLowThreshold
+   * @brief  set low threshold
+   * @return true or false
+  */
+  bool setLowThreshold(float lowThreshold);
+  
+  /**
+   * @fn getLowThreshold
+   * @brief  get low threshold
+   * @return low threshold
+  */
+  float getLowThreshold(void);
+  
+  /**
+   * @fn setConfig
+   * @brief set 'Interrupt mode' adn 'Polbit'
+   * @param interrputMode
+   * @n interrputMode = 0,The comparator mode is characterized that if the temperature value exceeds the THIGH value,
+   * @n                   the alert output is changed (e.g. from high to low if the polarity bit is set to 0 and vice versa). 
+   * @n                   alert output stays in that condition until the measured temperature drops below the defined TLOW value.
+   * @n interrputMode = 1,The interrupt mode is characterized that it changes the alert output as soon as the measured emperature crosses the THIGH or TLOW value threshold.
+   * @param polarity 1:Active high; 0:Active low.the polarity bit configures the polarity of the ALERT output. If the polarity bit is cleared, the ALERT output is low active while it becomes high active if the polarity bit is set to ‘1’.
+   * @return true or false
+  */
+  bool setConfig(uint8_t interrputMode,uint8_t polarity=0);
+  
+  /**
+   * @fn setConversionRate
+   * @brief set conversionRate
+   * @param conversionRate
+   * @n     e4000ms  = 0.25 Conv/s 
+   * @n     e1000ms  = 1 Conv/s 
+   * @n     e250ms   = 4 Conv/s 
+   * @n     e125ms   = 8 Conv/s 
+  */  
+  void setConversionRate(eConversionRate_t conversionRate );
 
-  /*!
-   * @fn readUid
-   * @brief Obtain the UID of the card .
-   * @return UID of the card.
-   */
-  String  readUid();
+  /**
+   * @fn setConsecutiveFaults
+   * @brief A fault condition persists if the measured temperature either exceeds the configured value in 
+   * @n     register THIGH or falls below the defined value in register TLOW. As a result, the ALERT pin 
+   * @n     indicates the fault condition if a defined number of consecutive temperature readings meets 
+   * @n     this fault condition.
+   * @param consecutiveFaults
+   * @n     eOnce
+   * @n     eTwice
+   * @n     eThreeTimes
+   * @n     eFourTimes
+  */  
+  void setConsecutiveFaults(eConsecutiveFaults_t consecutiveFaults);
 
-   /*!
-    * @fn readData(int block, uint8_t offset)
-    * @brief Read a byte from a specified block of a MIFARE Classic NFC smart card/tag.
-    * @param block The number of the block to read from.
-    * @param offset The offset of the block.
-    * @return A byte read from the card.
-    */
-  uint8_t readData(uint8_t block, uint8_t offset);
+  /**
+   * @fn setSingleShotConversion
+   * @brief set single shot conversion,only sleep mode
+  */ 
+  void setSingleShotConversion();
 
-  /*!
-   * @fn readData(uint8_t* buffer, uint8_t block)
-   * @brief Read a block from a MIFARE Classic NFC smart card/tag (16 bytes each block).
-   * @param buffer The buffer of the read data.
-   * @param block The number of the block to read from.
-   * @return Status code.
-   * @retval 1 successfully read data
-   * @retval -1 Failed to read data
-   */
-  String readData(uint8_t block);
+  /**
+   * @fn IsSingleShotComplete
+   * @brief Determine whether a single acquisition is completed, only in sleep mode
+   * @return Returns true after the collection is complete, otherwise it returns false
+  */  
+  bool IsSingleShotComplete();
 
-  /*!
-   * @fn writeData(int block, uint8_t num, uint8_t data)
-   * @brief Write a byte to a MIFARE Classic NFC smart card/tag.
-   * @param block The number of pages you want to writes the data.
-   * @param num The offset of the data.
-   * @param data The byte to be written.
-   */
-  char writeData(uint8_t block, uint8_t num, uint8_t data);
+  /**
+   * @fn wakeup
+   * @brief Wake up the device and start continuous acquisition
+  */   
+  void wakeup();
 
-  /*!
-   * @fn writeData(int block, uint8_t data[])
-   * @brief Write a block to a MIFARE Classic NFC smart card/tag..
-   * @param block The number of the block to write to.
-   * @param data The buffer of the data to be written.
-   */
-  char  writeData(uint8_t block, uint8_t data[]);
+  /**
+   * @fn sleep
+   * @brief sleep mode
+  */  
+  void sleep();
 
+  /**
+   * @fn getAlert
+   * @brief get alert,The alarm status is related to the polarity of the setting
+   * @n polarity=0 , alert=0  Active
+   * @n polarity=0 , alert=1  No Active
+   * @n polarity=1 , alert=1  Active
+   * @n polarity=1 , alert=0  No Active
+   * @return 0 or 1
+  */
+  uint8_t getAlert();
 
 ```
 
@@ -136,7 +180,7 @@ Micro:bit        |      √       |              |             |
 
 ## History
 
-- Date 2025-02-08
+- Date 2025-04-10
 - Version V0.1
 ## Credits
 Written by fary(feng.yang@dfrobot.com), 2025.02.08 (Welcome to our [website](https://www.dfrobot.com/))

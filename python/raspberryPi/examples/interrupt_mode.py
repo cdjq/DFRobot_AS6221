@@ -3,6 +3,7 @@
 @file interrupt_mode.py
 @brief This section describes how to use the interrupt mode of the AS6221.
 @details The interrupt mode is characterized that it changes the alert output as soon as the measured temperature crosses the THIGH or TLOW value threshold.
+@n An interrupt triggered by the same status occurs only once, meaning that after triggering the high threshold interrupt, the next one will only trigger the low threshold interrupt, and vice versa!
 @copyright	Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
 @license The MIT License (MIT)
 @author [fary](feng.yang@dfrobot.com)

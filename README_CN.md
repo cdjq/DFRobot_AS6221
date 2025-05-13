@@ -11,11 +11,11 @@ AS6221 是一种易于集成和使用的解决方案，具有工厂校准的传�
 此外，AS6221 温度传感器系统具有警报功能，可触发中断等功能，以保护设备免受过热的影响。AS6221 生产测试装置根据 NIST 进行校准，验证设备由 ISO/IEC-17025 认可的实验室进行校准。
 
 
-![正反面svg效果图](../resources/images/featured.png)
+![正反面svg效果图](../resources/images/SEN0660.png)
 
 ## 产品链接（ https://www.dfrobot.com.cn/ ）
 
-
+      SEN0660 Gravity: AS6221 皮肤温度传感器
 
 ## 目录
 

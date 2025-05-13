@@ -22,9 +22,9 @@ void setup() {
 	AS6221.wakeup();
 	/** eConversionRate_t conversionRate
 	 *  AS6221.e4000ms  = 0.25 Conv/s 
-   	 *  AS6221.e1000ms  = 1 Conv/s 
-   	 *  AS6221.e250ms   = 4 Conv/s 
-   	 *  AS6221.e125ms   = 8 Conv/s 
+	 *  AS6221.e1000ms  = 1 Conv/s 
+	 *  AS6221.e250ms   = 4 Conv/s 
+	 *  AS6221.e125ms   = 8 Conv/s 
 	 */
 	AS6221.setConversionRate(/*eConversionRate_t conversionRate=*/AS6221.e1000ms);
 	AS6221.setConfig(/*uint8_t interrputMode(range 0-1)=*/0);

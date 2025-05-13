@@ -1,14 +1,14 @@
-# DFRobot_SFA40
+# DFRobot_AS6221
 
 * [English Version](./README.md)
 AS6221 IC 是一款高精度数字温度传感器系统，通过 2 线数字总线与其他器件通信。它由一个 Si 带隙温度传感器、一个 ADC 和一个数字信号处理器组成。该传感器专为需要高测量精度的应用而设计，例如测量皮肤温度。除了这些应用外，它还可用于替代 PTC 电阻器。AS6221 具有高温精度和超低功耗（低工作和静态电流）特性，非常适合移动/电池供电应用。AS6221 是一种易于集成和使用的解决方案，具有工厂校准的传感器、集成线性化功能，可使用 8 个不同的 I²C 地址，从而能够在一条总线上使用 8 个 AS6221 器件。此外，AS6221 温度传感器系统具有警报功能，可触发中断等功能，以保护设备免受过热的影响。AS6221 生产测试装置根据 NIST 进行校准，验证设备由 ISO/IEC-17025 认可的实验室进行校准。
 
-![Product Image](../../resources/images/SEN0626svg.png)
+![Product Image](../../resources/images/SEN0660.png)
 
 
 ## 产品链接（https://www.dfrobot.com.cn/)
 
-  SEN0661 Gravity: SFA40 甲醛传感器
+      SEN0660 Gravity: AS6221 皮肤温度传感器
 
 ## 目录
 

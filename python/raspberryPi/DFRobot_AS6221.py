@@ -1,5 +1,4 @@
-
-
+# -*- coding: utf-8 -*-
 '''
 @file DFRobot_AS6221.py
 @brief DFRobot_AS6221 class infrastructure
@@ -54,10 +53,10 @@ class DFRobot_AS6221:
     def _read_register(self, reg, length=2):
         '''
         @fn _read_register
-        @brief 读取寄存器函数
-        @param reg  寄存器地址 8bits
-        @param length 要写入数据的长度
-        @return 读取的数据
+        @brief read register
+        @param reg  register address (8bits)
+        @param length   The length of the data to be read
+        @return data
         '''
         try:
             msg = i2c_msg.write(self._i2c_addr, [reg])
@@ -72,9 +71,9 @@ class DFRobot_AS6221:
     def _write_register(self, reg, data):
         '''
         @fn _write_register
-        @brief 写寄存器函数
-        @param reg  寄存器地址 8bits
-        @param data 要写入数据的存放缓存
+        @brief write register
+        @param reg  register address (8bits)
+        @param data   Data to be written
         @return True or False
         '''
         try:
@@ -117,7 +116,11 @@ class DFRobot_AS6221:
         '''
         data = self._read_register(self.AS6221_ADDR_THIGH)
         if data:
-            return ((data[0] << 8) | data[1]) * self.AS6221_RESOLUTION
+            raw_value = (data[0] << 8) | data[1]
+            if raw_value > 0x7FFF:
+                raw_value -= 0x10000
+            result = float(raw_value) * self.AS6221_RESOLUTION
+            return result
         return None
 
     def set_low_threshold(self, threshold):
@@ -139,7 +142,11 @@ class DFRobot_AS6221:
         '''
         data = self._read_register(self.AS6221_ADDR_TLOW)
         if data:
-            return ((data[0] << 8) | data[1]) * self.AS6221_RESOLUTION
+            raw_value = (data[0] << 8) | data[1]
+            if raw_value > 0x7FFF:  # 若最高位为1（负数）
+                raw_value -= 0x10000
+            result = float(raw_value) * self.AS6221_RESOLUTION
+            return result
         return None
 
     def set_config(self, interrupt_mode, polarity=0):
@@ -148,14 +155,17 @@ class DFRobot_AS6221:
         @brief set 'Interrupt mode' adn 'Polbit'
         @param interrupt_mode
         @n interrupt_mode = 0,The comparator mode is characterized that if the temperature value exceeds the THIGH value,
-        @n                   the alert output is changed (e.g. from high to low if the polarity bit is set to 0 and vice versa). 
-        @name                alert output stays in that condition until the measured temperature drops below the defined TLOW value.
+        @n                    the alert output is changed (e.g. from high to low if the polarity bit is set to 0 and vice versa). 
+        @n                    alert output stays in that condition until the measured temperature drops below the defined TLOW value.
         @n interrupt_mode = 1,The interrupt mode is characterized that it changes the alert output as soon as the measured emperature crosses the THIGH or TLOW value threshold.
         @param polarity 1:Active high; 0:Active low.the polarity bit configures the polarity of the ALERT output. If the polarity bit is cleared, the ALERT output is low active while it becomes high active if the polarity bit is set to ‘1’.
         @return true or false
         '''
-        if interrupt_mode > 1 or polarity > 1:
-            return False
+        # Validate parameters
+        if interrupt_mode not in (0, 1):
+            raise ValueError("Invalid interrupt_mode: {}. Must be 0 or 1".format(interrupt_mode))
+        if polarity not in (0, 1):
+            raise ValueError("Invalid polarity: {}. Must be 0 or 1".format(polarity))
         
         data = self._read_register(self.AS6221_ADDR_CONFIG)
         if not data:
@@ -190,7 +200,7 @@ class DFRobot_AS6221:
         @n     ConversionRate.e250ms   = 4 Conv/s 
         @n     ConversionRate.e125ms   = 8 Conv/s 
         '''
-        if not (0 <= rate <= 3):
+        if not isinstance(rate, int) or not (0 <= rate <= 3):
             return False
         data = self._read_register(self.AS6221_ADDR_CONFIG)
         if data:
@@ -212,7 +222,7 @@ class DFRobot_AS6221:
         @n     ConsecutiveFaults.eThreeTimes
         @n     ConsecutiveFaults.eFourTimes
         '''
-        if not (0 <= consecutive_faults <= 3):
+        if not isinstance(consecutive_faults, int) or not (0 <= consecutive_faults <= 3):
             return False
         data = self._read_register(self.AS6221_ADDR_CONFIG)
         if data:

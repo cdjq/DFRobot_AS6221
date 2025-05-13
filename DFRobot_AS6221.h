@@ -14,8 +14,6 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-
-
 #define ENABLE_DBG
 
 #ifdef ENABLE_DBG
@@ -24,21 +22,23 @@
 #define DBG(...)
 #endif
 
-
 #define AS6221_ADDR_TVAL      0 
 #define AS6221_ADDR_CONFIG    1 
 #define AS6221_ADDR_TLOW      2 
 #define AS6221_ADDR_THIGH     3 
 #define AS6221_RESOLUTION     0.0078125
+
 typedef struct {
   uint8_t   interrputMode: 1;
   uint8_t   polarity:1;
   uint8_t   reserved:6;
 } __attribute__ ((packed)) sMode_t;
+
 class DFRobot_AS6221
 {
 public:
- /**
+
+  /**
    * @struct sConfig_t
    * @brief Configuration register
    * @n --------------------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ public:
    * @n --------------------------------------------------------------------------------------------------------------------------------
    * @n | singleShot |   reserved   |consecutiveFaults |  polarity | InterrputMode | sleepMode | conversionRate |  alert  |   reserved  |
    * @n --------------------------------------------------------------------------------------------------------------------------------
-   */
+  */
   typedef struct {
 	  uint8_t   reserved: 5;
     uint8_t   alert: 1; /**< The alert bit can be used to easily compare the current temperature reading to the thresholds that can be set in the TLOW and THIGH registers */
@@ -73,19 +73,19 @@ public:
                                 /**< The alert bit has the same setting as the alert output if the device is set to comparator mode.  */
     uint8_t   polarity:1; /**< The polarity bit configures the polarity of the ALERT output. If the polarity bit is cleared, the  */
                           /**< ALERT output is low active while it becomes high active if the polarity bit is set to ‘1’. */
-	  uint8_t   consecutiveFaults:2;/**< A fault condition persists if the measured temperature either exceeds the configured value in  */
-                                /**< register THIGH or falls below the defined value in register TLOW. As a result, the ALERT pin  */
-                                /**< indicates the fault condition if a defined number of consecutive temperature readings meets  */
-                                /**< this fault condition. The number of consecutive faults are defined with two bits (12 and 11) and  */
-                                /**< prevent a false alert if environmental temperature noise is present */
+	  uint8_t   consecutiveFaults:2; /**< A fault condition persists if the measured temperature either exceeds the configured value in  */
+                                   /**< register THIGH or falls below the defined value in register TLOW. As a result, the ALERT pin  */
+                                   /**< indicates the fault condition if a defined number of consecutive temperature readings meets  */
+                                   /**< this fault condition. The number of consecutive faults are defined with two bits (12 and 11) and  */
+                                   /**< prevent a false alert if environmental temperature noise is present */
 	  uint8_t   reserved1:2;
 	  uint8_t   singleShot:1; /**< The device features a single shot measurement mode if the device is in sleep mode (SM=1).  */
-                          /**< By setting the “Single Shot-bit” to 1, a single temperature conversion is started and the SS-bit  */
-                          /**< can be read as 1 during the active conversion operation. Once the conversion is completed,  */
-                          /**< the device enters the sleep mode again and the SS-bit is set to 0. The single shot conversion  */
-                          /**< allows very low power consumption since a temperature conversion is executed on demand  */
-                          /**< only. This allows a user defined timing of the temperature conversions to be executed and is  */
-                          /**< used if the consecutive operation mode is not required. */
+                            /**< By setting the “Single Shot-bit” to 1, a single temperature conversion is started and the SS-bit  */
+                            /**< can be read as 1 during the active conversion operation. Once the conversion is completed,  */
+                            /**< the device enters the sleep mode again and the SS-bit is set to 0. The single shot conversion  */
+                            /**< allows very low power consumption since a temperature conversion is executed on demand  */
+                            /**< only. This allows a user defined timing of the temperature conversions to be executed and is  */
+                            /**< used if the consecutive operation mode is not required. */
 
 	} __attribute__ ((packed)) sConfig_t;
 
@@ -96,20 +96,20 @@ public:
    * @n     Additional readouts of the temperature register between conversions are possible but not
    * @n     recommended because the value is changed only after a conversion is finished.
    * @n     Values of 125 ms, 250 ms, 1 s and 4 s for a conversion can be configured while the default rate is set to 4 conversions per second.
-   */
+  */
   typedef enum{
     e4000ms = 0, /**< 0.25 Conv/s */
     e1000ms,     /**< 1 Conv/s */
-	e250ms,      /**< 4 Conv/s */
-	e125ms,      /**< 8 Conv/s */
+    e250ms,      /**< 4 Conv/s */
+    e125ms,      /**< 8 Conv/s */
   }eConversionRate_t;
   
   /**
-   * @enum eConversionFaults_t
+   * @enum  eConversionFaults_t
    * @brief A fault condition persists if the measured temperature either exceeds the configured value in register THIGH or falls below the defined value in register TLOW. 
    * @n     As a result, the ALERT pin indicates the fault condition if a defined number of consecutive temperature readings meets this fault condition.
    * @n     The number of consecutive faults are defined with two bits (12 and 11) and prevent a false alert if environmental temperature noise is present.
-   */
+  */
   typedef enum{
     eOnce = 0,  
     eTwice, 
@@ -120,7 +120,6 @@ private:
   TwoWire *_pWire;
   uint8_t _deviceAddr;  
 
-  
 public:
 
   /**
@@ -129,7 +128,7 @@ public:
    * @param addr device address
    * @param pWire device bus
    * @return None
-   */
+  */
   DFRobot_AS6221(uint8_t addr, TwoWire *pWire = &Wire){
     _pWire=pWire;
     _deviceAddr=addr;
@@ -168,14 +167,14 @@ public:
    * @fn setLowThreshold
    * @brief  set low threshold
    * @return true or false
-   */
+  */
   bool setLowThreshold(float lowThreshold);
   
   /**
    * @fn getLowThreshold
    * @brief  get low threshold
    * @return low threshold
-   */
+  */
   float getLowThreshold(void);
   
   /**
@@ -184,14 +183,13 @@ public:
    * @param interrputMode
    * @n interrputMode = 0,The comparator mode is characterized that if the temperature value exceeds the THIGH value,
    * @n                   the alert output is changed (e.g. from high to low if the polarity bit is set to 0 and vice versa). 
-   * @name                alert output stays in that condition until the measured temperature drops below the defined TLOW value.
+   * @n                   alert output stays in that condition until the measured temperature drops below the defined TLOW value.
    * @n interrputMode = 1,The interrupt mode is characterized that it changes the alert output as soon as the measured emperature crosses the THIGH or TLOW value threshold.
    * @param polarity 1:Active high; 0:Active low.the polarity bit configures the polarity of the ALERT output. If the polarity bit is cleared, the ALERT output is low active while it becomes high active if the polarity bit is set to ‘1’.
    * @return true or false
   */
   bool setConfig(uint8_t interrputMode,uint8_t polarity=0);
   
-
   /**
    * @fn setConversionRate
    * @brief set conversionRate
@@ -241,6 +239,7 @@ public:
    * @brief sleep mode
   */  
   void sleep();
+
   /**
    * @fn getAlert
    * @brief get alert,The alarm status is related to the polarity of the setting
@@ -251,13 +250,15 @@ public:
    * @return 0 or 1
   */
   uint8_t getAlert();
+
 protected:
   /**
    * @fn getConfig
    * @brief Get the settings for Interrupt mode and Polbit
    * @return the settings for Interrupt mode and Polbit
   */
-   sMode_t getConfig();
+  sMode_t getConfig();
+
   /** 
    * @fn writeReg
    * @brief write register
@@ -265,9 +266,9 @@ protected:
    * @param pBuf to write data to the storage cache
    * @param size The length of the data to be written
    * @return None
-   */
-   void writeReg(uint8_t reg, void* pBuf, size_t size);
-  
+  */
+  void writeReg(uint8_t reg, void* pBuf, size_t size);
+
   /**
    * @fn readReg
    * @brief read register function
@@ -276,8 +277,8 @@ protected:
    * @param size The length of the data to be written
    * @return uint8_t type, which indicates the return of the read register
    * @retval -1: A null pointer was passed, 0: IIC communication failed, and a non-negative integer greater than zero: the byte length read
-   */
-   uint8_t readReg(uint8_t reg, void* pBuf, size_t size);
+  */
+  uint8_t readReg(uint8_t reg, void* pBuf, size_t size);
 
 };
 
